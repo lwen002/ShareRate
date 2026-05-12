@@ -32,12 +32,15 @@
       margin: 0;
       background: var(--bg);
       color: var(--text);
+      overflow-x: hidden;
     }
 
     .app-shell {
       min-height: 100vh;
       display: grid;
       grid-template-columns: 224px minmax(0, 1fr);
+      width: 100%;
+      overflow-x: hidden;
     }
 
     .sidebar {
@@ -78,6 +81,7 @@
     .page {
       min-width: 0;
       padding: 24px 24px 40px;
+      overflow-x: hidden;
     }
 
     .topbar {
@@ -86,6 +90,7 @@
       justify-content: space-between;
       gap: 16px;
       margin-bottom: 18px;
+      flex-wrap: wrap;
     }
 
     .title-block h1 {
@@ -371,6 +376,7 @@
       border-radius: 8px;
       overflow: hidden;
       overflow-x: auto;
+      max-width: 100%;
     }
 
     table {
