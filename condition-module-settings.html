@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Share Rate條件設定</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --surface: #ffffff;
+      --line: #d9e0e8;
+      --line-strong: #b7c2ce;
+      --text: #1d2733;
+      --muted: #657386;
+      --brand: #0f766e;
+      --brand-dark: #115e59;
+      --soft-brand: #e6f5f2;
+      --warn: #b45309;
+      --ok: #157347;
+      --ok-bg: #e9f7ef;
+      --shadow: 0 20px 50px rgba(17, 24, 39, .12);
+      font-family: "Segoe UI", "Microsoft JhengHei", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 224px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: #1f2933;
+      color: #dbe4ef;
+      padding: 24px 18px;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+
+    .nav-group {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      border: 0;
+      background: transparent;
+      color: #afbdcb;
+      text-align: left;
+      padding: 11px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .nav-item.active {
+      background: #334155;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .page {
+      min-width: 0;
+      padding: 24px 24px 40px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .title-block h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .title-block p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    button { font: inherit; }
+
+    .btn {
+      min-height: 38px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 0 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .btn.primary {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .btn.primary:hover { background: var(--brand-dark); }
+
+    .btn.icon {
+      width: 34px;
+      min-height: 34px;
+      padding: 0;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .metric {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .metric strong { font-size: 22px; }
+
+    .flow-panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      background: #fbfcfe;
+    }
+
+    .panel-header h2 {
+      margin: 0 0 4px;
+      font-size: 17px;
+    }
+
+    .panel-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .flow-list {
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .flow-step {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .flow-step span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .flow-step strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .flow-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .toolbar {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1fr .7fr .7fr auto;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    input, select {
+      min-height: 38px;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      padding: 0 10px;
+      color: var(--text);
+      background: #fff;
+      font-size: 14px;
+      min-width: 0;
+    }
+
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 980px;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    th {
+      background: #eef2f6;
+      color: #344256;
+      text-align: left;
+      font-size: 13px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+    }
+
+    td {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    tbody tr:hover { background: #f8fafc; }
+    tbody tr:last-child td { border-bottom: 0; }
+
+    .w-priority { width: 72px; }
+    .w-module { width: 150px; }
+    .w-purpose { width: 150px; }
+    .w-effect { width: 200px; }
+    .w-apply { width: 110px; }
+    .w-status { width: 90px; }
+    .w-op { width: 110px; }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      min-height: 26px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 10px;
+      background: #eef5ff;
+      color: #1f4e79;
+      border: 1px solid #c7d9ef;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .chip.neutral {
+      background: #f3f4f6;
+      color: #465467;
+      border-color: #d6dbe1;
+    }
+
+    .status {
+      min-height: 26px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 10px;
+      font-size: 13px;
+      font-weight: 700;
+      background: var(--ok-bg);
+      color: var(--ok);
+    }
+
+    .status.off {
+      background: #fff7ed;
+      color: var(--warn);
+    }
+
+    .link-btn {
+      border: 0;
+      background: transparent;
+      color: var(--brand);
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px 3px;
+      text-decoration: none;
+    }
+
+    .cell-main {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .cell-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, .28);
+      opacity: 0;
+      visibility: hidden;
+      transition: .18s ease;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 520px;
+      height: 100vh;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      transform: translateX(102%);
+      transition: .22s ease;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    body.drawer-open .drawer-backdrop {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    body.drawer-open .drawer { transform: translateX(0); }
+
+    .drawer-header {
+      padding: 20px 22px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .drawer-header h2 {
+      margin: 0 0 4px;
+      font-size: 19px;
+    }
+
+    .drawer-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .drawer-body {
+      padding: 18px 22px;
+      overflow: auto;
+      display: grid;
+      align-content: start;
+      gap: 16px;
+    }
+
+    .section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .section-title h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .section-title span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .ratio-input { position: relative; }
+    .ratio-input input { width: 100%; padding-right: 30px; }
+    .ratio-input b {
+      position: absolute;
+      right: 10px;
+      top: 9px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .drawer-footer {
+      border-top: 1px solid var(--line);
+      padding: 14px 22px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    @media (max-width: 1180px) {
+      .flow-list { grid-template-columns: 1fr; }
+      .summary-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">採購條件管理</div>
+      <nav class="nav-group" aria-label="主要功能">
+        <a class="nav-item active" href="condition-module-settings.html">Share Rate條件設定</a>
+        <a class="nav-item" href="share-rate-process-flow.html">流程圖</a>
+      </nav>
+    </aside>
+
+    <section class="page">
+      <div class="topbar">
+        <div class="title-block">
+          <h1>Share Rate條件設定</h1>
+          <p>維護價格以外的買盤調整條件，例如信用額度、產能、交期與品質。</p>
+        </div>
+        <div class="actions">
+          <a class="btn" href="avl-condition-settings.html">回價格設定條件</a>
+          <button class="btn primary" id="newCondition">新增條件</button>
+        </div>
+      </div>
+
+      <div class="summary-row">
+        <div class="metric">
+          <span>條件模組</span>
+          <strong>4</strong>
+        </div>
+        <div class="metric">
+          <span>啟用條件</span>
+          <strong>4</strong>
+        </div>
+        <div class="metric">
+          <span>草稿條件</span>
+          <strong>2</strong>
+        </div>
+      </div>
+
+      <section class="flow-panel">
+        <div class="panel-header">
+          <div>
+            <h2>執行順位</h2>
+            <p>價格條件是基礎比例來源，其他模組依順位套用調整。</p>
+          </div>
+          <button class="btn">調整順序</button>
+        </div>
+        <div class="flow-list">
+          <div class="flow-step">
+            <span>Step 1</span>
+            <strong>價格條件</strong>
+            <p>由價格設定條件頁維護，產生基礎買盤比例。</p>
+          </div>
+          <div class="flow-step">
+            <span>Step 2</span>
+            <strong>廠商信用額度</strong>
+            <p>額度不足、評等異常時，設定比例上限或排除。</p>
+          </div>
+          <div class="flow-step">
+            <span>Step 3</span>
+            <strong>廠商產能</strong>
+            <p>依可承接量限制比例，避免超出供應能力。</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="toolbar">
+        <div class="field">
+          <label for="keyword">關鍵字</label>
+          <input id="keyword" type="text" placeholder="搜尋模組、判斷條件、處理方式">
+        </div>
+        <div class="field">
+          <label for="moduleType">條件模組</label>
+          <select id="moduleType">
+            <option>全部</option>
+            <option>廠商信用額度</option>
+            <option>廠商產能</option>
+            <option>交期能力</option>
+            <option>品質評分</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="status">狀態</label>
+          <select id="status">
+            <option>全部</option>
+            <option>啟用</option>
+            <option>草稿</option>
+            <option>停用</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button class="btn">查詢</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="w-priority">順位</th>
+              <th class="w-module">條件模組</th>
+              <th class="w-purpose">模組用途</th>
+              <th class="w-effect">處理方式</th>
+              <th class="w-apply">適用分類</th>
+              <th class="w-status">狀態</th>
+              <th class="w-op">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>價格條件</td>
+              <td>
+                <div class="cell-main">產生基礎比例</div>
+                <div class="cell-note">依加數與價差區間設定買盤比例</div>
+              </td>
+              <td><div class="chips"><span class="chip">產生買盤比例</span></div></td>
+              <td><div class="chips"><span class="chip neutral">MB</span><span class="chip neutral">NB</span></div></td>
+              <td><span class="status">啟用</span></td>
+              <td><a class="link-btn" href="avl-condition-settings.html">前往設定</a></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>廠商信用額度</td>
+              <td>
+                <div class="cell-main">後續調整</div>
+                <div class="cell-note">可用信用額度低於本次建議採購金額</div>
+              </td>
+              <td><div class="chips"><span class="chip">比例上限 30%</span><span class="chip neutral">不足排除</span></div></td>
+              <td><div class="chips"><span class="chip neutral">MB</span><span class="chip neutral">NB</span></div></td>
+              <td><span class="status">啟用</span></td>
+              <td><button class="link-btn editRule">編輯</button><button class="link-btn">停用</button></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>廠商信用額度</td>
+              <td>
+                <div class="cell-main">風險排除</div>
+                <div class="cell-note">信用評等為 C 或風險註記未解除</div>
+              </td>
+              <td><div class="chips"><span class="chip neutral">不列入買盤</span></div></td>
+              <td><div class="chips"><span class="chip neutral">MB</span><span class="chip neutral">NB</span></div></td>
+              <td><span class="status">啟用</span></td>
+              <td><button class="link-btn editRule">編輯</button><button class="link-btn">停用</button></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>廠商產能</td>
+              <td>
+                <div class="cell-main">後續調整</div>
+                <div class="cell-note">可供產能低於需求數量 50%</div>
+              </td>
+              <td><div class="chips"><span class="chip">比例上限 20%</span></div></td>
+              <td><div class="chips"><span class="chip neutral">MB</span></div></td>
+              <td><span class="status off">草稿</span></td>
+              <td><button class="link-btn editRule">編輯</button><button class="link-btn">啟用</button></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>廠商產能</td>
+              <td>
+                <div class="cell-main">供應排除</div>
+                <div class="cell-note">交期內無可承接產能</div>
+              </td>
+              <td><div class="chips"><span class="chip neutral">不列入買盤</span></div></td>
+              <td><div class="chips"><span class="chip neutral">MB</span><span class="chip neutral">NB</span></div></td>
+              <td><span class="status off">草稿</span></td>
+              <td><button class="link-btn editRule">編輯</button><button class="link-btn">啟用</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="drawer-backdrop" id="backdrop"></div>
+  <aside class="drawer" aria-label="條件模組編輯">
+    <div class="drawer-header">
+      <div>
+        <h2>編輯條件</h2>
+        <p>條件模組：信用額度 / 產能</p>
+      </div>
+      <button class="btn icon" id="closeDrawer" aria-label="關閉">×</button>
+    </div>
+    <div class="drawer-body">
+      <section class="section">
+        <div class="section-title">
+          <h3>條件模組</h3>
+          <span>ConditionModule</span>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="conditionModule">模組</label>
+            <select id="conditionModule">
+              <option>廠商信用額度</option>
+              <option>廠商產能</option>
+              <option>交期能力</option>
+              <option>品質評分</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="conditionPriority">執行順位</label>
+            <input id="conditionPriority" type="number" value="2">
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">
+          <h3>判斷條件</h3>
+          <span>ConditionExpression</span>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="conditionField">判斷欄位</label>
+            <select id="conditionField">
+              <option>可用信用額度</option>
+              <option>信用評等</option>
+              <option>可供產能</option>
+              <option>交期可承諾量</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="conditionOperator">運算子</label>
+            <select id="conditionOperator">
+              <option>小於</option>
+              <option>小於等於</option>
+              <option>等於</option>
+              <option>包含</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label for="conditionValue">門檻值 / 比對值</label>
+          <input id="conditionValue" type="text" value="本次建議採購金額">
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">
+          <h3>處理方式</h3>
+          <span>AdjustmentAction</span>
+        </div>
+        <div class="field">
+          <label for="adjustAction">動作</label>
+          <select id="adjustAction">
+            <option>設定買盤比例上限</option>
+            <option>依比例折減</option>
+            <option>不列入買盤</option>
+            <option>標記需人工覆核</option>
+          </select>
+        </div>
+        <div class="grid-2" style="margin-top:12px;">
+          <div class="field">
+            <label for="ratioCap">比例上限</label>
+            <div class="ratio-input"><input id="ratioCap" type="number" value="30"><b>%</b></div>
+          </div>
+          <div class="field">
+            <label for="adjustApply">適用分類</label>
+            <select id="adjustApply">
+              <option>MB / NB</option>
+              <option>MB</option>
+              <option>NB</option>
+            </select>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="drawer-footer">
+      <button class="btn" id="cancelDrawer">取消</button>
+      <button class="btn primary">儲存</button>
+    </div>
+  </aside>
+
+  <script>
+    const openDrawer = () => document.body.classList.add("drawer-open");
+    const closeDrawer = () => document.body.classList.remove("drawer-open");
+    document.querySelectorAll(".editRule, #newCondition").forEach((button) => {
+      button.addEventListener("click", openDrawer);
+    });
+    document.querySelectorAll("#closeDrawer, #cancelDrawer, #backdrop").forEach((button) => {
+      button.addEventListener("click", closeDrawer);
+    });
+  </script>
+</body>
+</html>

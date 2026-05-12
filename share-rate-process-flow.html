@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Share Rate流程圖</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --surface: #ffffff;
+      --line: #d9e0e8;
+      --line-strong: #b7c2ce;
+      --text: #1d2733;
+      --muted: #657386;
+      --brand: #0f766e;
+      --brand-dark: #115e59;
+      font-family: "Segoe UI", "Microsoft JhengHei", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 224px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: #1f2933;
+      color: #dbe4ef;
+      padding: 24px 18px;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+
+    .nav-group {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      border: 0;
+      background: transparent;
+      color: #afbdcb;
+      text-align: left;
+      padding: 11px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .nav-item.active {
+      background: #334155;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .page {
+      min-width: 0;
+      padding: 24px 24px 40px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .title-block h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+
+    .title-block p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      min-height: 38px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 0 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .btn.primary {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .btn.primary:hover {
+      background: var(--brand-dark);
+    }
+
+    .image-panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: auto;
+      padding: 18px;
+    }
+
+    .flow-image {
+      display: block;
+      width: 100%;
+      min-width: 960px;
+      height: auto;
+      border: 1px solid #eef2f6;
+      border-radius: 6px;
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">採購條件管理</div>
+      <nav class="nav-group" aria-label="主要功能">
+        <a class="nav-item" href="condition-module-settings.html">Share Rate條件設定</a>
+        <a class="nav-item active" href="share-rate-process-flow.html">流程圖</a>
+      </nav>
+    </aside>
+
+    <section class="page">
+      <div class="topbar">
+        <div class="title-block">
+          <h1>Share Rate Process Flow</h1>
+          <p>Share Rate 計算、異動、簽核與更新流程。</p>
+        </div>
+        <div class="actions">
+          <a class="btn" href="condition-module-settings.html">回 Share Rate條件設定</a>
+          <a class="btn primary" href="Share_Rate_Process_Flow_260512.png" target="_blank">開啟原圖</a>
+        </div>
+      </div>
+
+      <div class="image-panel">
+        <img class="flow-image" src="Share_Rate_Process_Flow_260512.png" alt="Share Rate Process Flow">
+      </div>
+    </section>
+  </main>
+</body>
+</html>
